@@ -1,0 +1,50 @@
+{# form.html — shared add/edit form.
+   Used for both creating and editing: when `r` is None the fields are blank
+   (new recipe); when `r` is a recipe row the fields are pre-filled (edit).
+   `action` (set by the route) decides which URL the form POSTs to. #}
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if r else 'New' }} recipe{% endblock %}
+{% block content %}
+<form class="recipe-form" method="post" action="{{ action }}">
+  <label>Title *
+    <input name="title" required value="{{ r.title if r else '' }}">
+  </label>
+  <label>Description
+    <input name="description" value="{{ r.description if r else '' }}">
+  </label>
+  <div class="row3">
+    <label>Prep time
+      <input name="prep_time" value="{{ r.prep_time if r else '' }}" placeholder="20 min">
+    </label>
+    <label>Cook time
+      <input name="cook_time" value="{{ r.cook_time if r else '' }}" placeholder="30 min">
+    </label>
+    <label>Servings
+      <input name="servings" value="{{ r.servings if r else '' }}" placeholder="4">
+    </label>
+  </div>
+  <label>Ingredients (one per line)
+    <textarea name="ingredients" rows="8"
+              placeholder="200 g flour&#10;2 eggs&#10;1 tsp salt">{{ r.ingredients if r else '' }}</textarea>
+  </label>
+  <label>Instructions (one step per line)
+    <textarea name="instructions" rows="8"
+              placeholder="Mix the dry ingredients&#10;Add eggs and whisk">{{ r.instructions if r else '' }}</textarea>
+  </label>
+  <label>My notes &amp; modifications
+    <textarea name="notes" rows="4"
+              placeholder="Used half the sugar, added cinnamon…">{{ r.notes if r else '' }}</textarea>
+  </label>
+  <label>Tags (comma separated)
+    <input name="tags" value="{{ r.tags if r else '' }}" placeholder="dinner, vegetarian, quick">
+  </label>
+  <label>Source URL
+    <input name="source_url" type="url" value="{{ r.source_url if r else '' }}"
+           placeholder="https://…">
+  </label>
+  <div class="form-actions">
+    <button class="btn btn-add" type="submit">Save</button>
+    <a class="btn" href="{{ '/recipe/' ~ r.id if r else '/' }}">Cancel</a>
+  </div>
+</form>
+{% endblock %}

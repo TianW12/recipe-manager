@@ -1,0 +1,22 @@
+{# index.html — the home page. Renders the search box, the tag filter chips,
+   and (by including partials/list.html) the grid of recipe cards. #}
+{% extends "base.html" %}
+{% block content %}
+<div class="search-bar">
+  <input type="search" id="search" name="q" value="{{ q }}"
+         placeholder="Search recipes, ingredients, tags…" autocomplete="off">
+</div>
+
+{% if tags %}
+<div class="tag-chips">
+  <a href="/" class="chip {% if not active_tag %}active{% endif %}">All</a>
+  {% for t in tags %}
+  <a href="/?tag={{ t }}" class="chip {% if active_tag == t %}active{% endif %}">{{ t }}</a>
+  {% endfor %}
+</div>
+{% endif %}
+
+<div id="recipe-list">
+  {% include "partials/list.html" %}
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!--
+  base.html — the shared page shell every other template extends.
+  It defines the <head> (PWA manifest, icons, mobile meta tags, stylesheet),
+  the top bar, and a "content" block that child templates fill in.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{% block title %}Recipes{% endblock %}</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#c0392b">
+  <link rel="icon" href="/static/icons/icon.svg">
+  <link rel="apple-touch-icon" href="/static/icons/icon.svg">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Recipes">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a href="/" class="brand">🍳 Recipes</a>
+    <div class="topbar-right">
+      {% if user %}
+      <a href="/recipe/new" class="btn btn-add">+ Add</a>
+      <form method="post" action="/logout" class="logout-form">
+        <button class="btn btn-ghost" type="submit"
+                title="Logged in as {{ user['email'] }}">
+          Log out{% if user['username'] %} ({{ user['username'] }}){% endif %}
+        </button>
+      </form>
+      {% else %}
+      <a href="/login" class="btn btn-add">Log in</a>
+      {% endif %}
+    </div>
+  </header>
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+  <script src="/static/js/app.js" defer></script>
+</body>
+</html>

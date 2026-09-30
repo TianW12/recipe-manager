@@ -1,0 +1,79 @@
+{# recipe.html — the full detail view of one recipe, plus Edit/Delete buttons.
+   Ingredients and instructions are stored as newline-separated text and split
+   into list items here; tags are split on commas. #}
+{% extends "base.html" %}
+{% block title %}{{ r.title }}{% endblock %}
+{% block content %}
+<article class="recipe">
+  <div class="recipe-head">
+    <h1>{{ r.title }}</h1>
+    {% if user %}
+    <div class="actions">
+      <a class="btn" href="/recipe/{{ r.id }}/edit">Edit</a>
+      <form method="post" action="/recipe/{{ r.id }}/delete"
+            onsubmit="return confirm('Delete this recipe?')">
+        <button class="btn btn-danger" type="submit">Delete</button>
+      </form>
+    </div>
+    {% endif %}
+  </div>
+
+  {% if r.description %}<p class="lead">{{ r.description }}</p>{% endif %}
+
+  <div class="meta big">
+    {% if r.prep_time %}<span>⏱ Prep: {{ r.prep_time }}</span>{% endif %}
+    {% if r.cook_time %}<span>🔥 Cook: {{ r.cook_time }}</span>{% endif %}
+    {% if r.servings %}<span>🍽 Serves: <span id="servings"
+      data-original="{{ r.servings }}">{{ r.servings }}</span></span>{% endif %}
+  </div>
+
+  {% if r.tags %}
+  <div class="tags">
+    {% for t in r.tags.split(',') if t.strip() %}
+    <a class="tag" href="/?tag={{ t.strip() }}">{{ t.strip() }}</a>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="columns">
+    <section>
+      <h2>Ingredients</h2>
+      <div class="scaler" id="scaler" data-servings="{{ r.servings }}">
+        <span class="scaler-label">Portions:</span>
+        <button type="button" class="btn scale-btn" data-factor="0.5">&frac12;&times;</button>
+        <button type="button" class="btn scale-btn active" data-factor="1">1&times;</button>
+        <button type="button" class="btn scale-btn" data-factor="2">2&times;</button>
+        <button type="button" class="btn scale-btn" data-factor="3">3&times;</button>
+        <input type="number" id="scale-custom" min="0.1" step="0.1"
+               placeholder="custom" title="Custom multiplier" />
+      </div>
+      <ul class="ingredients" id="ingredient-list">
+        {% for line in r.ingredients.splitlines() if line.strip() %}
+        <li data-original="{{ line.strip() }}">{{ line.strip() }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+    <section>
+      <h2>Instructions</h2>
+      <ol class="instructions">
+        {% for line in r.instructions.splitlines() if line.strip() %}
+        <li>{{ line.strip() }}</li>
+        {% endfor %}
+      </ol>
+    </section>
+  </div>
+
+  {% if r.notes %}
+  <section class="notes">
+    <h2>📝 My notes &amp; modifications</h2>
+    <p class="pre">{{ r.notes }}</p>
+  </section>
+  {% endif %}
+
+  {% if r.source_url %}
+  <p class="source">Source:
+    <a href="{{ r.source_url }}" target="_blank" rel="noopener">{{ r.source_url }}</a>
+  </p>
+  {% endif %}
+</article>
+{% endblock %}

@@ -1,0 +1,24 @@
+{# partials/list.html — just the grid of recipe cards.
+   Rendered inside index.html on a full page load, and returned on its own for
+   live search (see the ?partial=1 branch in main.py's index route). #}
+{% if recipes %}
+<div class="grid">
+  {% for r in recipes %}
+  <a class="card" href="/recipe/{{ r.id }}">
+    <h3>{{ r.title }}</h3>
+    {% if r.description %}<p class="muted">{{ r.description }}</p>{% endif %}
+    <div class="meta">
+      {% if r.prep_time %}<span>⏱ {{ r.prep_time }}</span>{% endif %}
+      {% if r.servings %}<span>🍽 {{ r.servings }}</span>{% endif %}
+    </div>
+    {% if r.tags %}
+    <div class="tags">
+      {% for t in r.tags.split(',') if t.strip() %}<span class="tag">{{ t.strip() }}</span>{% endfor %}
+    </div>
+    {% endif %}
+  </a>
+  {% endfor %}
+</div>
+{% else %}
+<p class="empty">No recipes found. <a href="/recipe/new">Add one →</a></p>
+{% endif %}

@@ -1,0 +1,18 @@
+{
+  "name": "Recipes",
+  "short_name": "Recipes",
+  "description": "My personal recipe collection",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f6f5f3",
+  "theme_color": "#c0392b",
+  "icons": [
+    {
+      "src": "/static/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
